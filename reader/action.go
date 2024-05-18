@@ -3,7 +3,10 @@ package reader
 import (
 	"errors"
 	"fmt"
+	"math/rand"
 	"strconv"
+	"strings"
+	"time"
 
 	"github.com/psbernardo/toyrobot/pkg"
 )
@@ -47,14 +50,11 @@ func Place(c *CommandReader) ActionHandler {
 
 	return ActionHandler{
 		Code:        PLACE,
-		Description: "PLACE - will put the toy robot on the table in position X,Y and facing NORTH, SOUTH, EAST or WEST.",
+		Description: "PLACE X,Y,F - will put the toy robot on the table in position X,Y and facing NORTH, SOUTH, EAST or WEST.",
 		Run: func(command string) error {
-			_, placeParameter, err := SplitByTwo(command, " ")
-			if err != nil {
-				return err
-			}
 
-			ToyRobot, err := createToyRobotFromString(placeParameter)
+			index := strings.Index(command, " ")
+			ToyRobot, err := createToyRobotFromString(command[index:])
 			if err != nil {
 
 				return err
@@ -70,7 +70,7 @@ func Move(c *CommandReader) ActionHandler {
 
 	return ActionHandler{
 		Code:        MOVE,
-		Description: "MOVE - will move the toy robot one unit forward in the direction it is currently facing.",
+		Description: "MOVE   - will move the toy robot one unit forward in the direction it is currently facing.",
 		Run: func(command string) error {
 			if c.ToyRobot != nil {
 				c.ToyRobot.Move()
@@ -85,7 +85,7 @@ func Left(c *CommandReader) ActionHandler {
 
 	return ActionHandler{
 		Code:        LEFT,
-		Description: "LEFT - will rotate the robot 90 degrees in the specified direction without changing the position of the robot.",
+		Description: "LEFT   - will rotate the robot 90 degrees in the specified direction without changing the position of the robot.",
 		Run: func(command string) error {
 			if c.ToyRobot != nil {
 				c.ToyRobot.TurnLeft()
@@ -100,7 +100,7 @@ func Right(c *CommandReader) ActionHandler {
 
 	return ActionHandler{
 		Code:        RIGHT,
-		Description: "RIGHT - will rotate the robot 90 degrees in the specified direction without changing the position of the robot.",
+		Description: "RIGHT  - will rotate the robot 90 degrees in the specified direction without changing the position of the robot.",
 		Run: func(command string) error {
 			if c.ToyRobot != nil {
 				c.ToyRobot.TurnRight()
@@ -128,10 +128,49 @@ func Help(c *CommandReader) ActionHandler {
 	return ActionHandler{
 		Code: HELP,
 		Run: func(command string) error {
+
 			for _, actionHandler := range c.mapCommandExecuter {
 				if len(actionHandler.Description) > 0 {
-					fmt.Println(actionHandler.Description)
+					typeLines(actionHandler.Description)
 				}
+
+			}
+			return nil
+		},
+	}
+}
+
+func Example(c *CommandReader) ActionHandler {
+	return ActionHandler{
+		Code: "EXAMPLE",
+		Run: func(command string) error {
+
+			exampleList := [][]string{
+				{
+					"a) PLACE 0,0,NORTH",
+					"   MOVE",
+					"   REPORT",
+					"   Output: 0,1,NORTH\n",
+				},
+				{
+					"b) PLACE 0,0,NORTH",
+					"   LEFT",
+					"   REPORT",
+					"   Output: 0,0,WEST\n",
+				},
+				{
+					"c) PLACE 1,2,EAST",
+					"   MOVE",
+					"   MOVE",
+					"   LEFT",
+					"   MOVE",
+					"   REPORT",
+					"   Output: 3,3,NORTH\n",
+				},
+			}
+
+			for _, example := range exampleList {
+				typeLines(example...)
 
 			}
 			return nil
@@ -159,4 +198,17 @@ func CreateXYFromString(x, y string) (int, int, error) {
 	}
 
 	return X, Y, nil
+}
+
+func typeLines(lines ...string) {
+	for _, line := range lines {
+		letters := []rune(line)
+		for _, letter := range letters {
+			fmt.Print(string(letter))
+			n := rand.Intn(10)
+			time.Sleep(time.Duration(n) * time.Nanosecond)
+		}
+		fmt.Println()
+	}
+
 }

@@ -9,6 +9,8 @@ import (
 
 func main() {
 
+	reader.PrintInstruction()
+
 	reader := reader.NewCommandReader(
 		reader.Place,
 		reader.Move,
@@ -16,6 +18,7 @@ func main() {
 		reader.Left,
 		reader.Report,
 		reader.Help,
+		reader.Example,
 		// add another command handler here
 	)
 

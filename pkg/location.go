@@ -16,11 +16,11 @@ func (t TableTop) IsInsideTheTablePot(X, Y int) bool {
 	if X < 0 || Y < 0 {
 		return false
 	}
-	if X > t.X {
+	if X > (t.X - 1) {
 		return false
 	}
 
-	if Y > t.Y {
+	if Y > (t.Y - 1) {
 		return false
 	}
 
@@ -51,7 +51,7 @@ func NewMoveDirections(tabletop *TableTop) map[string]MoveLocationFunc {
 func MoveNorth(tabletop *TableTop) func(l *Location) {
 
 	return func(l *Location) {
-		if l.Y < tabletop.Y {
+		if l.Y < (tabletop.Y - 1) {
 			l.Y++
 		}
 
@@ -69,7 +69,7 @@ func MoveSouth() func(l *Location) {
 
 func MoveEast(tabletop *TableTop) func(l *Location) {
 	return func(l *Location) {
-		if l.X < tabletop.X {
+		if l.X < (tabletop.X - 1) {
 			l.X++
 		}
 

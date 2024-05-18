@@ -3,6 +3,7 @@ package reader
 import "strings"
 
 func SplitByTwo(value, seperator string) (string, string, error) {
+	value = strings.ReplaceAll(value, " ", "")
 	splitString := strings.Split(value, seperator)
 	if len(splitString) < 2 {
 		return "", "", ErrNotEnoughParameter
@@ -11,6 +12,7 @@ func SplitByTwo(value, seperator string) (string, string, error) {
 }
 
 func SplitByThree(value, seperator string) (string, string, string, error) {
+	value = strings.ReplaceAll(value, " ", "")
 	splitString := strings.Split(value, seperator)
 	if len(splitString) < 3 {
 		return "", "", "", ErrNotEnoughParameter

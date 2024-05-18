@@ -75,6 +75,28 @@ func TestCommandReader_With_twice_Robot_Initialization(t *testing.T) {
 
 }
 
+func TestCommandReader_Case_2(t *testing.T) {
+
+	command := NewCommandReader(GetDefeaultAction()...)
+	robotLocation, err := command.RunCommand(
+		"PLACE 3,3,NORTH",
+		MOVE,
+		LEFT,
+		MOVE,
+		MOVE,
+		MOVE,
+	)
+
+	checkRobotLocation(
+		t,
+		Expected(0, 4, pkg.West),
+		robotLocation,
+	)
+
+	checkError(t, nil, err)
+
+}
+
 func TestCommandReader_Invalid_Place_Command(t *testing.T) {
 
 	testCaseList := []struct {

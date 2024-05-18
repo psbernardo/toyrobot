@@ -50,12 +50,12 @@ func Test_Robot_Case_3(t *testing.T) {
 
 func Test_Robot_Case_4(t *testing.T) {
 	toyRobot := NewRobot(East, 0, 0, NewMoveDirections(NewTableTop(4, 4)))
-	toyRobot.Moves(6)
+	toyRobot.Moves(5)
 	toyRobot.TurnLeft()
 	toyRobot.Move()
 
 	executeTest(
-		Expected(4, 1, North),
+		Expected(3, 1, North),
 		toyRobot.GetLocation(),
 		t,
 	)
