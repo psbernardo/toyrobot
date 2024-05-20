@@ -122,6 +122,12 @@ func TestCommandReader_Invalid_Place_Command(t *testing.T) {
 			},
 			expectedErr: ErrNotEnoughParameter,
 		},
+		{ // not enough place parameter
+			comands: []string{
+				"PLACE",
+			},
+			expectedErr: ErrNotEnoughParameter,
+		},
 		{ // wrong face direction
 			comands: []string{
 				"PLACE 1,4,WWEST",

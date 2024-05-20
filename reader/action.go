@@ -54,6 +54,10 @@ func Place(c *CommandReader) ActionHandler {
 		Run: func(command string) error {
 
 			index := strings.Index(command, " ")
+			if index == -1 {
+				return ErrNotEnoughParameter
+			}
+
 			ToyRobot, err := createToyRobotFromString(command[index:])
 			if err != nil {
 
