@@ -26,7 +26,7 @@ type CommandReaderOption func(r *CommandReader) ActionHandler
 
 type CommandReader struct {
 	ToyRobot           *pkg.ToyRobot
-	TableTop           *pkg.TableTop
+	TableTop           pkg.TableTop
 	mapCommandExecuter map[string]ActionHandler
 }
 

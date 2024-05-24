@@ -5,7 +5,7 @@ import "fmt"
 type ToyRobot struct {
 	CurrentLocation *Location
 	FaceDirection   string
-	mapMoveFunc     map[string]MoveLocationFunc
+	mapMoveFunc     map[string]moveLocationFunc
 }
 
 // X= 1, Y = 2
@@ -51,29 +51,66 @@ func IsValidDirection(value string) bool {
 	return false
 }
 
-type MoveLocationFunc func(l *Location)
+type moveLocationFunc func(tabletop TableTop)
 
-func NewRobot(faceDirection string, X, Y int, moveFunc map[string]MoveLocationFunc) *ToyRobot {
-	return &ToyRobot{
+func NewRobot(faceDirection string, X, Y int) *ToyRobot {
+
+	toyRobot := &ToyRobot{
 		FaceDirection: faceDirection,
 		CurrentLocation: &Location{
 			X: X,
 			Y: Y,
 		},
-		mapMoveFunc: moveFunc,
 	}
+
+	toyRobot.mapMoveFunc = map[string]moveLocationFunc{
+		North: toyRobot.moveNorth,
+		East:  toyRobot.moveEast,
+		West:  toyRobot.moveWest,
+		South: toyRobot.moveSouth,
+	}
+
+	return toyRobot
+
 }
 
-func (r *ToyRobot) Move() {
+func (r *ToyRobot) Move(tabletop TableTop) {
 	if moveFunc, OK := r.mapMoveFunc[r.FaceDirection]; OK {
-		moveFunc(r.CurrentLocation)
+		moveFunc(tabletop)
 	}
 }
 
-func (r *ToyRobot) Moves(count int) {
+func (r *ToyRobot) Moves(tabletop TableTop, count int) {
 	for i := 0; i < count; i++ {
-		r.Move()
+		r.Move(tabletop)
 	}
+}
+
+func (r *ToyRobot) moveNorth(tabletop TableTop) {
+	if r.CurrentLocation.Y < (tabletop.Y - 1) {
+		r.CurrentLocation.Y++
+	}
+}
+
+func (r *ToyRobot) moveSouth(tabletop TableTop) {
+	if r.CurrentLocation.Y > 0 {
+		r.CurrentLocation.Y--
+	}
+
+}
+
+func (r *ToyRobot) moveEast(tabletop TableTop) {
+	if r.CurrentLocation.X < (tabletop.X - 1) {
+		r.CurrentLocation.X++
+	}
+}
+
+func (r *ToyRobot) moveWest(tabletop TableTop) {
+
+	if r.CurrentLocation.X > 0 {
+		r.CurrentLocation.X--
+	}
+
 }
 
 // FACE- DIRECTION

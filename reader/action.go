@@ -45,7 +45,7 @@ func Place(c *CommandReader) ActionHandler {
 			return nil, ErrCoordinatesIsOutsideOfTableSize
 		}
 
-		return pkg.NewRobot(faceDirection, X, Y, pkg.NewMoveDirections(c.TableTop)), nil
+		return pkg.NewRobot(faceDirection, X, Y), nil
 	}
 
 	return ActionHandler{
@@ -77,7 +77,7 @@ func Move(c *CommandReader) ActionHandler {
 		Description: "MOVE   - will move the toy robot one unit forward in the direction it is currently facing.",
 		Run: func(command string) error {
 			if c.ToyRobot != nil {
-				c.ToyRobot.Move()
+				c.ToyRobot.Move(c.TableTop)
 			}
 			return nil
 		},
